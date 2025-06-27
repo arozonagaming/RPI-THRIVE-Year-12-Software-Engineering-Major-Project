@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <a id="logout" href="/logout">Logout</a>
+    
+    <h1 id="plant_name">{{ user.plant_name }}</h1>
+    <p>Last Watered: <span id="last_watered">--</span></p>
+    <p>Soil Moisture (VWC): <span id="soil_moisture">--</span> %</p>
+    <p>Temperature: <span id="temperature">--</span> °C</p>
+    <p>Plant Status: <span id="plant_status">--</span></p>
+    <p>System Status: <span id="system_status">--</span></p>
+</body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function fetchData() {
+        $.ajax({
+            method: "GET",
+            url: "/system?t=" + new Date().getTime(),
+            success: function(response) {
+                console.log("Data received:", response);
+                document.getElementById("last_watered").textContent = response.last_watered;
+                document.getElementById("soil_moisture").textContent = response.soil_moisture.toFixed(2);
+                document.getElementById("temperature").textContent = response.temperature.toFixed(2);
+                document.getElementById("system_status").textContent = response.system_status;
+                document.getElementById("plant_status").textContent = response.plant_status;
+            },
+            error: function(xhr, status, error) {
+                console.error("Error fetching data:", error);
+            }
+        });
+    }
+
+    fetchData();
+    setInterval(fetchData, 1000);
+</script>
+</html>
