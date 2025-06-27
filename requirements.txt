@@ -1,0 +1,5 @@
+flask
+Flask-SQLAlchemy
+flask-login
+adafruit-circuitpython-dht
+adafruit-circuitpython-ads1x15
